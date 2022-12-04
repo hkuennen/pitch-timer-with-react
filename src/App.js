@@ -16,6 +16,7 @@ class App extends Component {
     this.addMinutes = this.addMinutes.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
+    this.clockRef = React.createRef();
     this.state = {
       deadline: new Date(),
       isPaused: true,
@@ -35,6 +36,14 @@ class App extends Component {
       this.beep.load();
       this.gong.load();
     }
+
+  addShakeClass() {
+    this.clockRef.current.classList.add("shake");
+  }
+
+  removeShakeClass() {
+    this.clockRef.current.classList.remove("shake");
+  }
 
   getTimeRemaining(endtime) {
     let t = Date.parse(endtime) - Date.parse(new Date());
@@ -75,6 +84,7 @@ class App extends Component {
           });
           this.gong.play();
           this.gong.currentTime = 0;
+          this.addShakeClass()
         }
       } else if (this.state.isPaused) {
         clearInterval(timeinterval);
@@ -83,7 +93,7 @@ class App extends Component {
       }
     }
     updateClock();
-    let timeinterval = setInterval(updateClock, 1000);
+    let timeinterval = setInterval(updateClock, 800);
   }
     
   stopClock() {
@@ -160,7 +170,7 @@ class App extends Component {
           <h1>{this.state.timePermitted}</h1>
           <img src={logo} className="App-logo" alt="logo" />
           <p></p>
-          <div id="clockdiv">
+          <div id="clockdiv" ref = {this.clockRef}>
             <div>
               <span className="minutes">{this.state.minutes}</span>
               <div className="smalltext">min</div>
@@ -177,18 +187,21 @@ class App extends Component {
             <div className="minutes-btn-div bold">
               <a href="/" onClick={(e) => {
                 e.preventDefault();
-                this.setState(() => ({ isPaused: true, minutes: "05", seconds: "00", total: 300000, minutesInt: 5, timePermitted: "5 minutes", clickCount: 0 }))}
-              }
+                this.setState(() => ({ isPaused: true, minutes: "05", seconds: "00", total: 300000, minutesInt: 5, timePermitted: "5 minutes", clickCount: 0 }))
+                this.removeShakeClass();
+              }}
               >5 minutes</a>
               <a href="/" onClick={(e) => {
                 e.preventDefault();
-                this.setState(() => ({ isPaused: true, minutes: "03", seconds: "00", total: 180000, minutesInt: 3, timePermitted: "3 minutes", clickCount: 0 }))}
-              }
+                this.setState(() => ({ isPaused: true, minutes: "03", seconds: "00", total: 180000, minutesInt: 3, timePermitted: "3 minutes", clickCount: 0 }))
+                this.removeShakeClass();
+              }}
               >3 minutes</a>
               <a href="/" onClick={(e) => {
                 e.preventDefault();
-                this.setState(() => ({ isPaused: true, minutes: "01", seconds: "00", total: 60000, minutesInt: 1, timePermitted: "1 minute", clickCount: 0 }))}
-              }
+                this.setState(() => ({ isPaused: true, minutes: "01", seconds: "00", total: 60000, minutesInt: 1, timePermitted: "1 minute", clickCount: 0 }))
+                this.removeShakeClass();
+              }}
               >1 minute</a>
             </div>
           </div>
